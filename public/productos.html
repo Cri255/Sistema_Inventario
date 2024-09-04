@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Producto</title>
+    <!-- Importar Bootstrap CSS desde un CDN -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Importar archivo CSS personalizado -->
+    <link rel="stylesheet" href="/css/formulario.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center">Formulario de Producto</h2>
+        <form id="productoForm">
+            <div class="form-group">
+                <label for="idProducto">ID del Producto</label>
+                <input type="text" class="form-control" id="idProducto" placeholder="Ingrese el ID del producto" required>
+            </div>
+            <div class="form-group">
+                <label for="nombreProducto">Nombre del Producto</label>
+                <input type="text" class="form-control" id="nombreProducto" placeholder="Ingrese el nombre del producto" required>
+            </div>
+            <div class="form-group">
+                <label for="cantidadProducto">Cantidad del Producto</label>
+                <input type="number" class="form-control" id="cantidadProducto" placeholder="Ingrese la cantidad del producto" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Enviar</button>
+        </form>
+    </div>
+
+    <!-- Importar jQuery y Bootstrap JS desde un CDN -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
