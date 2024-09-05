@@ -6,37 +6,83 @@
     <title>Empaquetado de Productos</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .accordion-button:focus {
+            box-shadow: none; /* Eliminar el borde azul de Bootstrap */
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
         <h2>Empaquetado de Productos</h2>
-        <form id="empaquetadoForm">
-            <!-- Producto recibido del fritador -->
-            <div class="mb-3">
-                <label for="productoFritador" class="form-label">Producto Recibido del Fritador</label>
-                <select class="form-select" id="productoFritador" name="productoFritador" required>
-                    <!-- Aquí se cargarán los productos desde la base de datos -->
-                </select>
+        
+        <!-- Acordeón para Producto Recibido del Fritador -->
+        <div class="accordion mb-4" id="accordionRecibidoFritador">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingRecibidoFritador">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRecibidoFritador" aria-expanded="true" aria-controls="collapseRecibidoFritador">
+                        Producto Recibido del Fritador
+                    </button>
+                </h2>
+                <div id="collapseRecibidoFritador" class="accordion-collapse collapse show" aria-labelledby="headingRecibidoFritador" data-bs-parent="#accordionRecibidoFritador">
+                    <div class="accordion-body">
+                        <form id="recibidoFritadorForm">
+                            <!-- Producto recibido del fritador -->
+                            <div class="mb-3">
+                                <label for="productoFritador" class="form-label">Producto Recibido del Fritador</label>
+                                <select class="form-select" id="productoFritador" name="productoFritador" required>
+                                    <!-- Aquí se cargarán los productos desde la base de datos -->
+                                </select>
+                            </div>
+                            <!-- Cantidad recibida -->
+                            <div class="mb-3">
+                                <label for="cantidadRecibida" class="form-label">Cantidad Recibida</label>
+                                <input type="number" class="form-control" id="cantidadRecibida" name="cantidadRecibida" min="1" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Registrar fritador</button>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <!-- Cantidad recibida -->
-            <div class="mb-3">
-                <label for="cantidadRecibida" class="form-label">Cantidad Recibida</label>
-                <input type="number" class="form-control" id="cantidadRecibida" name="cantidadRecibida" min="1" required>
+        </div>
+
+        <!-- Acordeón para Producto Empacado -->
+        <div class="accordion" id="accordionEmpacado">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingEmpacado">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEmpacado" aria-expanded="false" aria-controls="collapseEmpacado">
+                        Producto Empacado
+                    </button>
+                </h2>
+                <div id="collapseEmpacado" class="accordion-collapse collapse" aria-labelledby="headingEmpacado" data-bs-parent="#accordionEmpacado">
+                    <div class="accordion-body">
+                        <form id="empaquetadoForm">
+                            <!-- Producto empaquetado -->
+                            <div class="mb-3">
+                                <label for="productoEmpacado" class="form-label">Producto Empacado</label>
+                                <select class="form-select" id="productoEmpacado" name="productoEmpacado" required>
+                                    <!-- Aquí se cargarán los productos desde la base de datos -->
+                                </select>
+                            </div>
+                            <!-- Cantidad empacada -->
+                            <div class="mb-3">
+                                <label for="cantidadEmpacada" class="form-label">Cantidad Empacada</label>
+                                <input type="number" class="form-control" id="cantidadEmpacada" name="cantidadEmpacada" min="1" required>
+                            </div>
+                            <!-- Empacador -->
+                            <div class="mb-3">
+                                <label for="empacador" class="form-label">Empacador</label>
+                                <select class="form-select" id="empacador" name="empacador" required>
+                                    <!-- Aquí se cargarán los empacadores desde la base de datos -->
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-success">Registrar Empaque</button>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <!-- Producto empaquetado -->
-            <div class="mb-3">
-                <label for="productoEmpacado" class="form-label">Producto Empacado</label>
-                <select class="form-select" id="productoEmpacado" name="productoEmpacado" required>
-                    <!-- Aquí se cargarán los productos desde la base de datos -->
-                </select>
-            </div>
-            <!-- Cantidad empacada -->
-            <div class="mb-3">
-                <label for="cantidadEmpacada" class="form-label">Cantidad Empacada</label>
-                <input type="number" class="form-control" id="cantidadEmpacada" name="cantidadEmpacada" min="1" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Registrar Empaque</button>
-        </form>
+        </div>
+        
     </div>
 
     <!-- Bootstrap JS Bundle with Popper -->
@@ -44,6 +90,6 @@
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Script externo para manejar el formulario -->
-    <script src="empaquetado.js"></script>
+    <script src="./js/packaging.js"></script>
 </body>
 </html>
