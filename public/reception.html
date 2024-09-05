@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recepción de Productos</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Recepción de Productos</h2>
+        <form id="receptionForm">
+            <div class="mb-3">
+                <label for="producto" class="form-label">Producto</label>
+                <select class="form-select" id="producto" name="producto" required>
+                    <!-- Aquí se cargarán los productos desde la base de datos -->
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="cantidad" class="form-label">Cantidad</label>
+                <input type="number" class="form-control" id="cantidad" name="cantidad" min="1" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Registrar Recepción</button>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Script externo para manejar el formulario -->
+    <script src="reception.js"></script>
+</body>
+</html>

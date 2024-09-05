@@ -3,24 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Packaging</title>
+    <title>Empaquetado de Productos</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1>Register Packaging</h1>
-    <form id="packaging-form">
-        <label for="material_id">Material ID:</label>
-        <input type="number" id="material_id" name="material_id" required>
-        <br>
-        <label for="quantity">Quantity:</label>
-        <input type="number" step="0.01" id="quantity" name="quantity" required>
-        <br>
-        <button type="submit">Submit</button>
-    </form>
-    <script>
-        document.getElementById('packaging-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            // Implement form submission here
-        });
-    </script>
+    <div class="container mt-5">
+        <h2>Empaquetado de Productos</h2>
+        <form id="empaquetadoForm">
+            <!-- Producto recibido del fritador -->
+            <div class="mb-3">
+                <label for="productoFritador" class="form-label">Producto Recibido del Fritador</label>
+                <select class="form-select" id="productoFritador" name="productoFritador" required>
+                    <!-- Aquí se cargarán los productos desde la base de datos -->
+                </select>
+            </div>
+            <!-- Cantidad recibida -->
+            <div class="mb-3">
+                <label for="cantidadRecibida" class="form-label">Cantidad Recibida</label>
+                <input type="number" class="form-control" id="cantidadRecibida" name="cantidadRecibida" min="1" required>
+            </div>
+            <!-- Producto empaquetado -->
+            <div class="mb-3">
+                <label for="productoEmpacado" class="form-label">Producto Empacado</label>
+                <select class="form-select" id="productoEmpacado" name="productoEmpacado" required>
+                    <!-- Aquí se cargarán los productos desde la base de datos -->
+                </select>
+            </div>
+            <!-- Cantidad empacada -->
+            <div class="mb-3">
+                <label for="cantidadEmpacada" class="form-label">Cantidad Empacada</label>
+                <input type="number" class="form-control" id="cantidadEmpacada" name="cantidadEmpacada" min="1" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Registrar Empaque</button>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Script externo para manejar el formulario -->
+    <script src="empaquetado.js"></script>
 </body>
 </html>
