@@ -21,9 +21,8 @@ const db = new sqlite3.Database(dbPath, (err) => {
     db.serialize(() => {
       db.run(`
         CREATE TABLE IF NOT EXISTS productos (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          nombre TEXT NOT NULL,
-          cantidad FLOAT NOT NULL
+          id TEXT PRIMARY KEY,
+          nombre TEXT NOT NULL
         )
       `);
 
@@ -53,7 +52,9 @@ const db = new sqlite3.Database(dbPath, (err) => {
           fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
           material_id INTEGER,
           cantidad FLOAT NOT NULL,
-          FOREIGN KEY (material_id) REFERENCES productos(id) ON DELETE CASCADE
+          empacador_id INTEGER,
+          FOREIGN KEY (material_id) REFERENCES productos(id) ON DELETE CASCADE,
+          FOREIGN KEY (empacador_id) REFERENCES empacadores(id) ON DELETE SET NULL
         )
       `);
 
@@ -71,6 +72,14 @@ const db = new sqlite3.Database(dbPath, (err) => {
           username TEXT UNIQUE NOT NULL,
           password TEXT NOT NULL,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+      `);
+
+      db.run(`
+        CREATE TABLE IF NOT EXISTS empacadores (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          nombre TEXT NOT NULL,
+          fecha_ingreso DATETIME DEFAULT CURRENT_TIMESTAMP
         )
       `);
     });
