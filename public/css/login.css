@@ -6,11 +6,11 @@
 }
 
 body {
-  background: #004b34;
+  background: #cccccc;
 }
 
 h1 {
-  color: #ccc;
+  color: #39da00;
   text-align: center;
   font-family: 'Vibur', cursive;
   font-size: 50px;
@@ -69,7 +69,7 @@ h1 {
 }
 
 .log-btn {
-  background: #0AC986;
+  background: #39da00;
   display: inline-block;
   width: 100%;
   font-size: 16px;

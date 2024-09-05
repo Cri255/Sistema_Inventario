@@ -7,22 +7,25 @@
 
 /* Estilos para la barra lateral (sidebar) */
 .sidebar {
-    width: 250px;
-    background-color: #4CAF50; /* Color de fondo verde */
+    width: 320px;
+    background-color: #ffffff; /* Color de fondo verde */
     color: white;
     padding: 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     position: relative;
+    border-radius: 10px;
+    height: 993px;
 }
 
 /* Estilo para el encabezado dentro de la barra lateral */
 .sidebar-header {
-    background-color: #388E3C; /* Verde más oscuro */
+    background: linear-gradient(to bottom right, #39da00, #248301); /* Degradado desde verde claro a verde más oscuro */
     padding: 15px;
     margin-bottom: 20px;
-    border-radius: 5px;
+    border-radius: 8px;
     text-align: center;
 }
+
 
 /* Estilo para el texto del encabezado */
 .sidebar-header h1 {
@@ -39,27 +42,27 @@
 }
 
 .sidebar ul li {
-    margin: 10px 0; /* Menos margen para reducir el espacio en blanco */
+    margin: 20px 0; /* Mayor margen para aumentar el espacio entre opciones */
 }
 
 .sidebar ul li a {
-    color: white;
+    color: #b6b6b6;
     text-decoration: none;
     display: flex;
     align-items: center;
     font-size: 18px;
-    padding: 10px;
+    padding: 12px; /* Aumentar el padding para mayor área clicable */
     border-radius: 5px; /* Bordes redondeados */
     transition: background-color 0.3s, color 0.3s; /* Transiciones suaves */
 }
 
 .sidebar ul li a i {
-    margin-right: 10px;
+    margin-right: 15px; /* Mayor margen para separar más el ícono del texto */
 }
 
 /* Efecto hover para los ítems del menú */
 .sidebar ul li a:hover {
-    background-color: #388E3C; /* Verde más oscuro al pasar el ratón */
+    background-color: #39da00;; /* Verde más oscuro al pasar el ratón */
     color: #f1f1f1;
 }
 
@@ -73,6 +76,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    border-radius: 10px;
 }
 
 /* Estilo para los encabezados y párrafos en el contenido principal */
@@ -87,3 +91,11 @@
     text-align: center;
     color: #666;
 }
+
+.sidebar-image {
+    display: block;
+    margin: 220px auto; /* Centra la imagen horizontalmente y añade margen superior e inferior */
+    max-width: 100%; /* Ajusta el tamaño máximo de la imagen */
+    height: auto; /* Mantiene la proporción de la imagen */
+}
+
