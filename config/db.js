@@ -59,27 +59,29 @@ const db = new sqlite3.Database(dbPath, (err) => {
       `);
 
       db.run(`
-        CREATE TABLE IF NOT EXISTS inventario (
-          material_id INTEGER PRIMARY KEY,
-          cantidad FLOAT DEFAULT 0,
-          FOREIGN KEY (material_id) REFERENCES productos(id) ON DELETE CASCADE
-        )
-      `);
-
-      db.run(`
-        CREATE TABLE IF NOT EXISTS usuarios (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          username TEXT UNIQUE NOT NULL,
-          password TEXT NOT NULL,
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-      `);
-
-      db.run(`
         CREATE TABLE IF NOT EXISTS empacadores (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           nombre TEXT NOT NULL,
           fecha_ingreso DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+      `);
+
+      // Agregar las nuevas tablas
+      db.run(`
+        CREATE TABLE IF NOT EXISTS prod_recibidos_recepcion (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          producto TEXT NOT NULL,
+          cantidad FLOAT NOT NULL,
+          fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+      `);
+
+      db.run(`
+        CREATE TABLE IF NOT EXISTS prod_recibidos_frituras (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          producto TEXT NOT NULL,
+          cantidad FLOAT NOT NULL,
+          fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP
         )
       `);
     });

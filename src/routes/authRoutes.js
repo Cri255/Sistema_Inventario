@@ -1,12 +1,9 @@
 // routes/authRoutes.js
 const express = require('express');
 const router = express.Router();
+const authController = require('../controllers/authController'); // Asegúrate de que la ruta sea correcta
 
-// Ruta de autenticación (ejemplo)
-router.post('/login', (req, res) => {
-    const { username, password } = req.body;
-    // Aquí deberías agregar la lógica de autenticación
-    res.send('Autenticación exitosa');
-});
+// Ruta de autenticación
+router.post('/login', authController.login);
 
 module.exports = router;

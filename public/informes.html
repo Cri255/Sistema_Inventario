@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informes</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./css/informes.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        canvas {
+            max-width: 100%;
+            height: auto;
+        }
+        .chart-container {
+            display: none; /* Ocultar los gráficos por defecto */
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col text-center">
+                <h1>Informes</h1>
+                <div class="btn-group-vertical" role="group" aria-label="Informes">
+                    <button type="button" id="btn-daily" class="btn btn-primary mb-2">Informe Diario</button>
+                    <button type="button" id="btn-weekly" class="btn btn-success mb-2">Informe Semanal</button>
+                    <button type="button" id="btn-monthly" class="btn btn-info mb-2">Informe Mensual</button>
+                    <button type="button" id="btn-annual" class="btn btn-warning">Informe Anual</button>
+                </div>
+                <!-- Contenedores para gráficos -->
+                <div id="chart-container" class="chart-container">
+                    <canvas id="chart-canvas"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById('btn-daily').addEventListener('click', () => {
+            showChart('daily');
+        });
+
+        document.getElementById('btn-weekly').addEventListener('click', () => {
+            showChart('weekly');
+        });
+
+        document.getElementById('btn-monthly').addEventListener('click', () => {
+            showChart('monthly');
+        });
+
+        document.getElementById('btn-annual').addEventListener('click', () => {
+            showChart('annual');
+        });
+
+        function showChart(period) {
+    fetch(`/api/generate-report/${period}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al obtener el informe');
+            }
+            return response.blob();
+        })
+        .then(blob => {
+            const url = URL.createObjectURL(blob);
+            const img = document.createElement('img');
+            img.src = url;
+            img.onload = () => URL.revokeObjectURL(url);
+            
+            const chartContainer = document.getElementById('chart-container');
+            chartContainer.innerHTML = ''; // Limpiar el contenedor
+            chartContainer.appendChild(img); // Agregar el gráfico al contenedor
+            chartContainer.style.display = 'block'; // Mostrar el contenedor
+        })
+        .catch(error => {
+            console.error('Error al mostrar el gráfico:', error);
+        });
+}
+
+
+    </script>
+</body>
+</html>

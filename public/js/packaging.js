@@ -34,29 +34,29 @@ $(document).ready(function() {
         }
     });
 
-    // Manejar el envío del formulario de empaquetado
     $('#empaquetadoForm').submit(function(e) {
         e.preventDefault();
         const productoEmpacadoId = $('#productoEmpacado').val();
         const cantidadEmpacada = $('#cantidadEmpacada').val();
-        const empacadorId = $('#empacador').val();
-
-        // Realizar una solicitud POST al servidor para registrar el empaque
+        const fecha = new Date().toISOString(); // Agregar fecha actual
+    
+        // Realizar una solicitud POST al servidor para registrar el producto empacado
         $.ajax({
-            url: '/api/empaques', // Endpoint para registrar el empaque
+            url: '/api/empaques',
             method: 'POST',
-            data: { productoEmpacadoId, cantidadEmpacada, empacadorId },
+            contentType: 'application/json', // Asegúrate de que el tipo de contenido sea JSON
+            data: JSON.stringify({ fecha, material_id: productoEmpacadoId, cantidad: cantidadEmpacada, empacador_id: $('#empacador').val() }),
             success: function(response) {
-                alert('Empaque registrado con éxito.');
+                alert('Producto empacado registrado con éxito.');
                 $('#empaquetadoForm')[0].reset(); // Limpiar el formulario
             },
             error: function(error) {
-                console.error('Error al registrar el empaque:', error);
-                alert('Ocurrió un error al registrar el empaque.');
+                console.error('Error al registrar el producto empacado:', error);
+                alert('Ocurrió un error al registrar el producto empacado.');
             }
         });
     });
-
+    
     // Manejar el envío del formulario de recibido fritador
     $('#recibidoFritadorForm').submit(function(e) {
         e.preventDefault();
@@ -65,9 +65,10 @@ $(document).ready(function() {
 
         // Realizar una solicitud POST al servidor para registrar el producto recibido
         $.ajax({
-            url: '/api/recibido-fritador', // Endpoint para registrar el producto recibido
+            url: '/api/recibido-fritador',
             method: 'POST',
-            data: { productoFritadorId, cantidadRecibida },
+            contentType: 'application/json', // Asegúrate de que el tipo de contenido sea JSON
+            data: JSON.stringify({ producto: productoFritadorId, cantidad: cantidadRecibida }),
             success: function(response) {
                 alert('Producto recibido registrado con éxito.');
                 $('#recibidoFritadorForm')[0].reset(); // Limpiar el formulario

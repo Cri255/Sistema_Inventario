@@ -1,0 +1,37 @@
+/* styles.css */
+
+/* Estilo para el botón Informe Diario */
+.btn-daily {
+    background-color: #007bff; /* Azul */
+    color: white;
+    font-size: 1.25rem; /* Tamaño de fuente mayor */
+    padding: 15px 25px; /* Aumenta el tamaño del botón */
+}
+
+/* Estilo para el botón Informe Semanal */
+.btn-weekly {
+    background-color: #28a745; /* Verde */
+    color: white;
+    font-size: 1.25rem; /* Tamaño de fuente mayor */
+    padding: 15px 25px; /* Aumenta el tamaño del botón */
+}
+
+/* Estilo para el botón Informe Mensual */
+.btn-monthly {
+    background-color: #ffc107; /* Amarillo */
+    color: black;
+    font-size: 1.25rem; /* Tamaño de fuente mayor */
+    padding: 15px 25px; /* Aumenta el tamaño del botón */
+}
+
+/* Estilo para el botón Informe Anual */
+.btn-annual {
+    background-color: #dc3545; /* Rojo */
+    color: white;
+    font-size: 1.25rem; /* Tamaño de fuente mayor */
+    padding: 15px 25px; /* Aumenta el tamaño del botón */
+}
+
+.btn-spacing {
+    margin-bottom: 20px; /* Espacio entre botones */
+}

@@ -1,49 +1,32 @@
 $(document).ready(function() {
-    // Cargar productos en el dropdown
+    // Cargar productos en el dropdown al cargar la página
     $.ajax({
-        url: '/api/productos',  // Ruta correcta en el servidor
+        url: '/productos',  // Asegúrate de que esta sea la ruta correcta en el servidor
         method: 'GET',
-        success: function(productos) {
-            console.log('Productos recibidos:', productos); // Verifica los productos recibidos en la consola
+        success: function(response) {
+            console.log('Productos recibidos:', response); // Verifica la respuesta completa en la consola
+
+            const productos = response.data; // Accede a la lista de productos dentro del objeto "data"
             const select = $('#productos'); // Selecciona el dropdown
 
             // Limpiar el dropdown antes de agregar opciones
             select.empty();
             select.append(new Option('Seleccione un producto', ''));
 
-            // Agregar los productos como opciones al dropdown
-            productos.forEach(producto => {
-                select.append(new Option(producto.nombre, producto.id));
-            });
+            // Verificar si hay productos disponibles
+            if (Array.isArray(productos) && productos.length > 0) {
+                // Agregar los productos como opciones al dropdown
+                productos.forEach(producto => {
+                    select.append(new Option(producto.nombre, producto.id));
+                });
+                console.log(productos);
+            } else {
+                select.append(new Option('No hay productos disponibles', ''));
+            }
         },
         error: function(xhr, status, error) {
             console.error('Error al cargar productos:', error); // Verifica si hay un error
+            $('#message').html('<div class="alert alert-danger">Error al cargar productos. Por favor, inténtalo más tarde.</div>');
         }
-    });
-
-    // Manejar el envío de formulario de recepción
-    $('#formRecepcion').submit(function(e) {
-        e.preventDefault(); // Evitar el envío del formulario tradicional
-
-        const productoId = $('#productos').val();
-        const cantidad = $('#cantidad').val();
-
-        if (productoId === '') {
-            alert('Por favor, selecciona un producto.');
-            return;
-        }
-
-        $.ajax({
-            url: '/api/recepciones', // Ruta correcta para registrar recepciones
-            method: 'POST',
-            data: { productoId, cantidad },
-            success: function(response) {
-                alert('Recepción registrada con éxito'); // Mensaje de éxito
-                $('#formRecepcion')[0].reset(); // Limpiar el formulario
-            },
-            error: function(xhr, status, error) {
-                console.error('Error al registrar la recepción:', error); // Verifica si hay un error
-            }
-        });
     });
 });

@@ -42,8 +42,14 @@
 }
 
 .sidebar ul li {
-    margin: 20px 0; /* Mayor margen para aumentar el espacio entre opciones */
+    margin: 20px 0; 
+    
 }
+
+.sidebar ul li a {
+    font-size: 20px; 
+}
+
 
 .sidebar ul li a {
     color: #b6b6b6;
@@ -94,7 +100,7 @@
 
 .sidebar-image {
     display: block;
-    margin: 220px auto; /* Centra la imagen horizontalmente y añade margen superior e inferior */
+    margin: 190px auto; /* Centra la imagen horizontalmente y añade margen superior e inferior */
     max-width: 100%; /* Ajusta el tamaño máximo de la imagen */
     height: auto; /* Mantiene la proporción de la imagen */
 }

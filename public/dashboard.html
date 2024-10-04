@@ -22,7 +22,9 @@
                 <li><a href="#" data-content="frying"><i class="fas fa-oil-can"></i> Frituras</a></li>
                 <li><a href="#" data-content="packaging"><i class="fas fa-cube"></i> Empacado</a></li>
                 <li><a href="#" data-content="empacadores"><i class="fas fa-box"></i> Empacadores</a></li>
-                <li><a id="logoutButton" href="#"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
+                <li><a href="#" data-content="informes"><i class="fas fa-chart-line"></i> Informes</a></li>
+                <li><a href="#" id="logout"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
+
             </ul>
             <img src="./assets/vector.png" alt="Descripción de la imagen" class="sidebar-image">
         </div>
@@ -31,5 +33,13 @@
         </div>
     </div>
     <script src="js/dashboard.js"></script>
+
+    <script>
+        document.getElementById('logout').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = 'index.html'; 
+        });
+    </script>
+    
 </body>
 </html>

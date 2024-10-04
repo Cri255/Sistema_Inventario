@@ -1,7 +1,17 @@
-// src/routes/friturasRoutes.js
 const express = require('express');
 const router = express.Router();
 const db = require('../../config/db');
+
+// Obtener todos los productos (asegúrate de que esta ruta sea correcta)
+router.get('/productos', (req, res) => {
+  db.all('SELECT * FROM productos', [], (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json(rows); // Retorna solo los productos
+  });
+});
 
 // Obtener todas las frituras
 router.get('/', (req, res) => {
