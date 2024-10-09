@@ -1,7 +1,7 @@
 $(document).ready(function() {
     // Obtener los productos desde la base de datos para las listas desplegables
     $.ajax({
-        url: '/api/productos', // Asegúrate de que esta URL sea correcta
+        url: '/productos', // Asegúrate de que esta URL sea correcta
         method: 'GET',
         success: function(data) {
             // Limpiar las listas desplegables antes de llenarlas
@@ -39,7 +39,7 @@ $(document).ready(function() {
     
         // Realizar una solicitud POST al servidor para registrar la recepción
         $.ajax({
-            url: '/api/recibidos_recepcion',
+            url: 'recibidos_recepcion',
             method: 'POST',
             data: { productoId: productoRecibidoId, cantidad: cantidadRecibida },
             success: function(response) {

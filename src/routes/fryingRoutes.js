@@ -3,7 +3,7 @@ const router = express.Router();
 const db = require('../../config/db');
 
 // Obtener todos los productos (asegúrate de que esta ruta sea correcta)
-router.get('/productos', (req, res) => {
+router.get('/', (req, res) => {
   db.all('SELECT * FROM productos', [], (err, rows) => {
     if (err) {
       res.status(500).json({ error: err.message });

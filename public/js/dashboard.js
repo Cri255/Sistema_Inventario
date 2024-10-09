@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Cambiar el src del iframe en lugar de cargar el contenido en un div
             const iframe = document.getElementById('content-frame');
-            iframe.src = `${contentId}.html`;
+            iframe.src = `${contentId}.html`;   
         });
     });
 });

@@ -1,8 +1,15 @@
 /* Estilos generales para el contenedor */
+html, body {
+    overflow: hidden; /* Evitar scroll en la página */
+    height: 100%;
+    margin: 0;
+}
+
 .container {
     display: flex;
     height: 100vh;
     font-family: 'Arial', sans-serif;
+    overflow: hidden; /* Evitar que el contenedor permita scroll */
 }
 
 /* Estilos para la barra lateral (sidebar) */
@@ -14,7 +21,7 @@
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     position: relative;
     border-radius: 10px;
-    height: 993px;
+    height: 100%; /* Asegurar que la sidebar ocupe todo el alto disponible */
 }
 
 /* Estilo para el encabezado dentro de la barra lateral */
@@ -25,7 +32,6 @@
     border-radius: 8px;
     text-align: center;
 }
-
 
 /* Estilo para el texto del encabezado */
 .sidebar-header h1 {
@@ -43,15 +49,10 @@
 
 .sidebar ul li {
     margin: 20px 0; 
-    
 }
 
 .sidebar ul li a {
     font-size: 20px; 
-}
-
-
-.sidebar ul li a {
     color: #b6b6b6;
     text-decoration: none;
     display: flex;
@@ -68,7 +69,7 @@
 
 /* Efecto hover para los ítems del menú */
 .sidebar ul li a:hover {
-    background-color: #39da00;; /* Verde más oscuro al pasar el ratón */
+    background-color: #39da00; /* Verde más oscuro al pasar el ratón */
     color: #f1f1f1;
 }
 
@@ -103,5 +104,5 @@
     margin: 190px auto; /* Centra la imagen horizontalmente y añade margen superior e inferior */
     max-width: 100%; /* Ajusta el tamaño máximo de la imagen */
     height: auto; /* Mantiene la proporción de la imagen */
+    margin-top: 50px;
 }
-
