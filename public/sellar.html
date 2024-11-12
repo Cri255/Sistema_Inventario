@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Empaquetado de Productos</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <style>
+        body {
+            font-size: 16px;
+        }
+        h1 {
+            font-weight: bold;
+            font-size: 24px;
+        }
+        .btn-link {
+            font-weight: bold;
+            font-size: 18px;
+            text-decoration: none;
+            color: black;
+        }
+        .btn-link:hover {
+            text-decoration: none;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .card-header {
+            background-color: #cfe2ff; /* Fondo azul claro en el encabezado */
+        }
+        .btn-primary {
+            background-color: #007bff; /* Azul brillante para el botón */
+            border-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Empaquetado de Productos</h1>
+
+        <div class="accordion mt-4" id="accordionExample">
+            <!-- Acordeón Producto Recibido del Fritador -->
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Producto Recibido del Fritador
+                        </button>
+                    </h2>
+                </div>
+
+                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                    <div class="card-body">
+                        <form id="productoRecibidoForm">
+                            <div class="form-group">
+                                <label for="productoRecibido">Producto Recibido del Fritador</label>
+                                <select class="form-control" id="productoRecibido" name="productoRecibido" required>
+                                    <!-- Aquí se cargarán los productos desde la base de datos -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="cantidadRecibida">Cantidad Recibida</label>
+                                <input type="number" class="form-control" id="cantidadRecibida" name="cantidadRecibida" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Registrar fritador</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Acordeón Producto Empacado -->
+            <div class="card mt-3">
+                <div class="card-header" id="headingTwo">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Producto Empacado
+                        </button>
+                    </h2>
+                </div>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                    <div class="card-body">
+                        <form id="productoSelladoForm">
+                            <div class="form-group">
+                                <label for="productoSellado">Producto Empacado</label>
+                                <select class="form-control" id="productoSellado" name="productoSellado" required>
+                                    <!-- Aquí se cargarán los productos desde la base de datos -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="cantidadSellada">Cantidad Sellada</label>
+                                <input type="number" class="form-control" id="cantidadSellada" name="cantidadSellada" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Registrar sellado</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

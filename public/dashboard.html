@@ -8,6 +8,26 @@
     <!-- Font Awesome para los iconos -->
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Estilos generales del contenedor y sidebar */
+        .container { display: flex; height: 100vh; }
+        .sidebar { background-color: #f8f8f8; width: 250px; color: #fff; padding: 20px; box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); }
+        .sidebar h1 { font-style: italic; margin: 0; padding-bottom: 15px; }
+        .sidebar img { width: 100%; margin-top: 20px; }
+        .main-content { flex: 1; }
+
+        /* Estilos del acordeón */
+        .accordion { list-style-type: none; padding: 0; margin: 0; }
+        .accordion li { border-top: 1px solid rgba(255, 255, 255, 0.1); overflow: hidden; transition: max-height 0.3s ease; }
+        .accordion li a { display: flex; align-items: center; padding: 15px 10px; color: #fff; font-size: 16px; font-weight: bold; text-decoration: none; cursor: pointer; }
+        .accordion li a:hover { background-color: rgba(0, 0, 0, 0.2); }
+        .accordion li a i { margin-right: 10px; }
+
+        /* Submenú oculto por defecto y estilo activo */
+        .accordion li ul { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .accordion li.active ul { max-height: 100px; }
+        .accordion li ul li a { padding: 10px; font-weight: normal; font-size: 14px; }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -15,31 +35,65 @@
             <div class="sidebar-header">
                 <h1>DELIPAPA</h1>
             </div>
-            <ul>
-                <br>
-                <br>
+            <ul class="accordion">
                 <li><a href="#" data-content="reception"><i class="fas fa-warehouse"></i> Recepción</a></li>
                 <li><a href="#" data-content="frying"><i class="fas fa-oil-can"></i> Frituras</a></li>
-                <li><a href="#" data-content="packaging"><i class="fas fa-cube"></i> Empacado</a></li>
-                <li><a href="#" data-content="empacadores"><i class="fas fa-box"></i> Empacadores</a></li>
+
+                <li>
+                    <a><i class="fas fa-cube"></i> Empacado <i class="fas fa-chevron-down" style="margin-left:auto;"></i></a>
+                    <ul>
+                        <li><a href="#" data-content="packaging"><i class="fas fa-cube"></i> Empacado</a></li>
+                        <li><a href="#" data-content="empacadores"><i class="fas fa-users"></i> Empacadores</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a><i class="fas fa-archive"></i> Sellado <i class="fas fa-chevron-down" style="margin-left:auto;"></i></a>
+                    <ul>
+                        <li><a href="#" data-content="sellar"><i class="fas fa-archive"></i> Sellar</a></li>
+                        <li><a href="#" data-content="selladores"><i class="fas fa-users"></i> Selladores</a></li>
+                        <br>
+                    </ul>
+                </li>
+
                 <li><a href="#" data-content="informes"><i class="fas fa-chart-line"></i> Informes</a></li>
                 <li><a href="#" id="logout"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
-
             </ul>
             <img src="./assets/vector.png" alt="Descripción de la imagen" class="sidebar-image">
         </div>
+        
         <div class="main-content">
             <iframe id="content-frame" name="content-frame" src="welcome.html" frameborder="0" style="width: 100%; height: 100%;"></iframe>
         </div>
     </div>
-    <script src="js/dashboard.js"></script>
 
+    <script src="js/dashboard.js"></script>
     <script>
+        // Script para manejar el acordeón y cerrar otros al abrir uno nuevo
+        document.querySelectorAll('.accordion > li > a').forEach(item => {
+            item.addEventListener('click', function(e) {
+                const parent = this.parentElement;
+                
+                // Si el elemento ya está activo, simplemente se cierra
+                if (parent.classList.contains('active')) {
+                    parent.classList.remove('active');
+                } else {
+                    // Cerrar todos los elementos activos
+                    document.querySelectorAll('.accordion > li').forEach(li => li.classList.remove('active'));
+                    // Activar el elemento actual
+                    parent.classList.add('active');
+                }
+
+                // Evitar el comportamiento por defecto si tiene submenú
+                if (parent.querySelector('ul')) e.preventDefault();
+            });
+        });
+
+        // Redirección para cerrar sesión
         document.getElementById('logout').addEventListener('click', function(e) {
             e.preventDefault();
             window.location.href = 'index.html'; 
         });
     </script>
-    
 </body>
 </html>

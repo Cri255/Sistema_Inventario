@@ -102,7 +102,7 @@ html, body {
 .sidebar-image {
     display: block;
     margin: 190px auto; /* Centra la imagen horizontalmente y añade margen superior e inferior */
-    max-width: 100%; /* Ajusta el tamaño máximo de la imagen */
+    max-width: 90%; /* Ajusta el tamaño máximo de la imagen */
     height: auto; /* Mantiene la proporción de la imagen */
-    margin-top: 50px;
+    margin-top: -20px;
 }
