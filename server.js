@@ -5,9 +5,11 @@ const path = require('path');
 const sqlite3 = require('sqlite3').verbose();
 const bcrypt = require('bcrypt'); // Solo una vez
 const { registrarRecepcion, registrarFritura, obtenerProductos } = require('./public/js/frying'); 
+const router = express.Router();
 
 const app = express();
 const port = 3000;
+app.use(router);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -17,7 +19,8 @@ const db = new sqlite3.Database(dbPath, (err) => {
     if (err) {
         console.error('Error al conectar con la base de datos:', err.message);
     } else {
-        console.log('Conectado a la base de datos SQLite.');
+        console.log('Conectado a la base de datos Eseculito.');
+        console.log('Base de datos:', dbPath);
     }
 });
 
@@ -34,7 +37,6 @@ app.use(session({
 // --------------------------------------------- RUTAS PARA RECEPCIÓN Y FRITURA ---------------------------------------------
 // Usamos express.Router() para organizar las rutas
 
-const router = express.Router();
 
 // Ruta para registrar productos recibidos (Empacadores)
 router.post('/api/recepcion', (req, res) => {
@@ -75,6 +77,8 @@ router.post('/api/fritura', (req, res) => {
 // Ruta para obtener productos desde la base de datos
 router.get('/api/productos', (req, res) => {
     const query = 'SELECT id, nombre FROM productos';
+    console.log('query', query, dbPath, db);
+    
     db.all(query, [], (err, rows) => {
         if (err) {
             console.error('Error al obtener productos:', err.message);
@@ -87,7 +91,6 @@ router.get('/api/productos', (req, res) => {
 // --------------------------------------------- FIN DE LAS RUTAS ---------------------------------------------
 
 // Usamos el Router para todas las rutas de la API
-app.use(router);
 
 // --------------------------------------------- RUTAS DE LOGIN Y DASHBOARD ---------------------------------------------
 

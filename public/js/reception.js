@@ -5,6 +5,9 @@ const path = require('path');
 const router = express.Router();
 const dbPath = path.resolve(__dirname, 'inventario.db');
 const db = new sqlite3.Database(dbPath, (err) => {
+    console.log('dbPath', dbPath);
+    console.log('db', db);
+    console.log('Conectado a la base de datos SQLite.');
     if (err) {
         console.error('Error al conectar con la base de datos:', err.message);
     } else {
@@ -42,9 +45,11 @@ db.run(`
 });
 
 // Ruta para obtener productos
-router.get('/productos', (req, res) => {
+router.get('/api/productos', (req, res) => {
+    
     const query = 'SELECT id, nombre FROM productos';
     db.all(query, [], (err, rows) => {
+        console.log('peneeeeeeeeeeeeeeeee');
         if (err) {
             console.error('Error al obtener productos:', err.message);
             return res.status(500).json({ error: err.message });
