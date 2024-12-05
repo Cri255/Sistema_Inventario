@@ -1,83 +1,70 @@
-$(document).ready(function() {
-    // Obtener los productos desde la base de datos para las listas desplegables
-    $.ajax({
-        url: '/productos', // Asegúrate de que esta URL sea correcta
-        method: 'GET',
-        success: function(data) {
-            // Limpiar las listas desplegables antes de llenarlas
-            $('#productoRecibido').empty();
-            $('#productoFrito').empty();
+const sqlite3 = require('sqlite3').verbose();
+const express = require('express');
+const router = express.Router();
 
-            // Llenar las listas desplegables con los productos obtenidos
-            if (Array.isArray(data) && data.length > 0) {
-                data.forEach(function(producto) {
-                    $('#productoRecibido').append(new Option(producto.nombre, producto.id));
-                    $('#productoFrito').append(new Option(producto.nombre, producto.id));
-                });
-            } else {
-                $('#productoRecibido').append(new Option('No hay productos disponibles', ''));
-                $('#productoFrito').append(new Option('No hay productos disponibles', ''));
-            }
-        },
-        error: function(error) {
-            console.error('Error al obtener productos:', error);
-            alert('Ocurrió un error al cargar los productos.');
-        }
-    });
-
-    // Manejar el envío del formulario de recepción
-    $('#recibidoForm').submit(function(e) {
-        e.preventDefault();
-        const productoRecibidoId = $('#productoRecibido').val();
-        const cantidadRecibida = $('#cantidadRecibida').val();
-    
-        // Validar los datos
-        if (!productoRecibidoId || !cantidadRecibida) {
-            alert('Por favor, complete todos los campos.');
-            return;
-        }
-    
-        // Realizar una solicitud POST al servidor para registrar la recepción
-        $.ajax({
-            url: 'recibidos_recepcion',
-            method: 'POST',
-            data: { productoId: productoRecibidoId, cantidad: cantidadRecibida },
-            success: function(response) {
-                alert('Recepción registrada con éxito.');
-                $('#recibidoForm')[0].reset(); // Limpiar el formulario
-            },
-            error: function(error) {
-                console.error('Error al registrar la recepción:', error);
-                alert('Ocurrió un error al registrar la recepción.');
-            }
-        });
-    });
-
-    // Manejar el envío del formulario de fritura
-    $('#fritoForm').submit(function(e) {
-        e.preventDefault();
-        const productoFritoId = $('#productoFrito').val();
-        const cantidadFrita = $('#cantidadFrita').val();
-
-        // Validar los datos
-        if (!productoFritoId || !cantidadFrita) {
-            alert('Por favor, complete todos los campos.');
-            return;
-        }
-
-        // Realizar una solicitud POST al servidor para registrar la fritura
-        $.ajax({
-            url: '/api/frituras',
-            method: 'POST',
-            data: { productoId: productoFritoId, cantidad: cantidadFrita }, // Asegúrate de que los nombres coincidan
-            success: function(response) {
-                alert('Fritura registrada con éxito.');
-                $('#fritoForm')[0].reset(); // Limpiar el formulario
-            },
-            error: function(error) {
-                console.error('Error al registrar la fritura:', error);
-                alert('Ocurrió un error al registrar la fritura.');
-            }
-        });
-    });
+// Crear una instancia de la base de datos SQLite
+const db = new sqlite3.Database('./inventario.db', (err) => {
+  if (err) {
+    console.error('Error al conectar con la base de datos:', err.message);
+  } else {
+    console.log('Conexión a la base de datos exitosa');
+  }
 });
+
+// Función para obtener los productos desde la base de datos
+function obtenerProductos(callback) {
+  const query = 'SELECT id, nombre FROM productos';
+  db.all(query, [], (err, rows) => {
+    if (err) {
+      return callback(err, null);
+    }
+    callback(null, rows);
+  });
+}
+
+// Ruta para obtener productos
+router.get('/productos', (req, res) => {
+  obtenerProductos((err, rows) => {
+    if (err) {
+      console.error('Error al obtener productos:', err.message);
+      return res.status(500).json({ error: err.message });
+    }
+    res.json({ message: 'success', data: rows });
+  });
+});
+
+// Función para registrar los productos recibidos (Empacadores)
+function registrarRecepcion(productoId, cantidad, callback) {
+  const query = 'INSERT INTO prod_recibidos_empacadores (producto_id, cantidad) VALUES (?, ?)';
+  db.run(query, [productoId, cantidad], function(err) {
+    if (err) {
+      return callback(err, null);
+    }
+    callback(null, { message: 'Recepción registrada con éxito', id: this.lastID });
+  });
+}
+
+// Función para registrar la fritura de productos
+function registrarFritura(productoId, cantidad, callback) {
+  const query = 'INSERT INTO frituras (producto_id, cantidad) VALUES (?, ?)';
+  db.run(query, [productoId, cantidad], function(err) {
+    if (err) {
+      return callback(err, null);
+    }
+    callback(null, { message: 'Fritura registrada con éxito', id: this.lastID });
+  });
+}
+
+// Cerrar la conexión cuando ya no sea necesario
+function cerrarConexion() {
+  db.close((err) => {
+    if (err) {
+      console.error('Error al cerrar la base de datos:', err.message);
+    } else {
+      console.log('Conexión cerrada');
+    }
+  });
+}
+
+// Exportar las funciones y el enrutador
+module.exports = { obtenerProductos, registrarRecepcion, registrarFritura, cerrarConexion, router };

@@ -1,32 +1,90 @@
-$(document).ready(function() {
-    // Cargar productos en el dropdown al cargar la página
-    $.ajax({
-        url: '/productos',  // Asegúrate de que esta sea la ruta correcta en el servidor
-        method: 'GET',
-        success: function(response) {
-            console.log('Productos recibidos:', response); // Verifica la respuesta completa en la consola
+const express = require('express');
+const sqlite3 = require('sqlite3').verbose();
+const path = require('path');
 
-            const productos = response.data; // Accede a la lista de productos dentro del objeto "data"
-            const select = $('#productos'); // Selecciona el dropdown
+const router = express.Router();
+const dbPath = path.resolve(__dirname, 'inventario.db');
+const db = new sqlite3.Database(dbPath, (err) => {
+    if (err) {
+        console.error('Error al conectar con la base de datos:', err.message);
+    } else {
+        console.log('Conectado a la base de datos SQLite.');
+    }
+});
 
-            // Limpiar el dropdown antes de agregar opciones
-            select.empty();
-            select.append(new Option('Seleccione un producto', ''));
+// Crear las tablas "productos" y "recepciones" si no existen
+db.run(`
+    CREATE TABLE IF NOT EXISTS productos (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nombre TEXT NOT NULL
+    )
+`, (err) => {
+    if (err) {
+        console.error('Error al crear la tabla productos:', err.message);
+    } else {
+        console.log('Tabla "productos" lista.');
+    }
+});
 
-            // Verificar si hay productos disponibles
-            if (Array.isArray(productos) && productos.length > 0) {
-                // Agregar los productos como opciones al dropdown
-                productos.forEach(producto => {
-                    select.append(new Option(producto.nombre, producto.id));
-                });
-                console.log(productos);
-            } else {
-                select.append(new Option('No hay productos disponibles', ''));
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error('Error al cargar productos:', error); // Verifica si hay un error
-            $('#message').html('<div class="alert alert-danger">Error al cargar productos. Por favor, inténtalo más tarde.</div>');
+db.run(`
+    CREATE TABLE IF NOT EXISTS recepciones (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        material_id INTEGER NOT NULL,
+        cantidad INTEGER NOT NULL,
+        FOREIGN KEY (material_id) REFERENCES productos(id)
+    )
+`, (err) => {
+    if (err) {
+        console.error('Error al crear la tabla recepciones:', err.message);
+    } else {
+        console.log('Tabla "recepciones" lista.');
+    }
+});
+
+// Ruta para obtener productos
+router.get('/productos', (req, res) => {
+    const query = 'SELECT id, nombre FROM productos';
+    db.all(query, [], (err, rows) => {
+        if (err) {
+            console.error('Error al obtener productos:', err.message);
+            return res.status(500).json({ error: err.message });
         }
+        res.json({ message: 'success', data: rows });
     });
 });
+
+// Ruta para registrar una nueva recepción
+router.post('/recepciones', (req, res) => {
+    const { material_id, cantidad } = req.body;
+
+    if (!material_id || !cantidad) {
+        return res.status(400).json({ error: 'Faltan datos requeridos.' });
+    }
+
+    // Validar que el material_id existe en la tabla productos
+    const checkProductQuery = 'SELECT id FROM productos WHERE id = ?';
+    db.get(checkProductQuery, [material_id], (err, row) => {
+        if (err) {
+            console.error('Error al verificar el producto:', err.message);
+            return res.status(500).json({ error: err.message });
+        }
+        if (!row) {
+            return res.status(404).json({ error: 'Producto no encontrado.' });
+        }
+
+        // Insertar la recepción en la tabla "recepciones"
+        const query = 'INSERT INTO recepciones (material_id, cantidad) VALUES (?, ?)';
+        db.run(query, [material_id, cantidad], function (err) {
+            if (err) {
+                console.error('Error al registrar recepción:', err.message);
+                return res.status(500).json({ error: err.message });
+            }
+            res.json({
+                message: 'Recepción registrada',
+                data: { id: this.lastID, material_id, cantidad },
+            });
+        });
+    });
+});
+
+module.exports = router;

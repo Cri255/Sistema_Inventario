@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Vibur'); /* Usar comillas simples para la URL */
+@import url('https://fonts.googleapis.com/css?family=Vibur'); 
 
 * {
   box-sizing: border-box;
@@ -20,13 +20,13 @@ h1 {
   width: 350px;
   padding: 40px 30px;
   background: #eee;
-  border-radius: 4px; /* Reemplazo de @include border-radius */
+  border-radius: 4px; 
   margin: auto;
   position: absolute;
   left: 0;
   right: 0;
   top: 50%;
-  transform: translateY(-50%); /* Reemplazo de @include translateY */
+  transform: translateY(-50%); 
 }
 
 .form-group {

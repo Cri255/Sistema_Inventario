@@ -6,7 +6,6 @@
     <title>Frituras de Productos</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
-    
 </head>
 <body>
     <div class="container mt-5">
@@ -78,7 +77,38 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Script externo para manejar el formulario -->
-    <script src="./js/frying.js"></script>
+    
+    <!-- Script para manejar el AJAX -->
+    <script>
+        $(document).ready(function() {
+            // Obtener los productos desde la base de datos para las listas desplegables
+            $.ajax({
+    url: '/productos',
+    method: 'GET',
+    success: function(data) {
+        console.log('Productos obtenidos:', data);  // Verifica los productos
+        $('#productoRecibido').empty();
+        $('#productoFrito').empty();
+
+        if (Array.isArray(data) && data.length > 0) {
+            data.forEach(function(producto) {
+                $('#productoRecibido').append(new Option(producto.nombre, producto.id)); 
+                $('#productoFrito').append(new Option(producto.nombre, producto.id));
+            });
+        } else {
+            $('#productoRecibido').append(new Option('No hay productos disponibles', ''));
+            $('#productoFrito').append(new Option('No hay productos disponibles', ''));
+        }
+    },
+    error: function(error) {
+        console.error('Error al obtener productos:', error);
+        alert('Ocurrió un error al cargar los productos.');
+    }
+});
+
+
+            // Aquí seguiría el código para el manejo de formularios (como ya lo tienes)
+        });
+    </script>
 </body>
 </html>

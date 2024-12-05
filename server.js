@@ -2,67 +2,147 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const path = require('path');
+const sqlite3 = require('sqlite3').verbose();
+const bcrypt = require('bcrypt'); // Solo una vez
+const { registrarRecepcion, registrarFritura, obtenerProductos } = require('./public/js/frying'); 
 
 const app = express();
-
-const productosRoutes = require('./src/routes/productosRoutes');
-
-const authController = require('./src/controllers/authController');
-const empacadoresController = require('./src/controllers/empacadoresController');
-const friturasController = require('./src/controllers/friturasController');
-const empaquesController = require('./src/controllers/empaquesController');
-const recepcionesController = require('./src/controllers/recepcionesController');
-
 const port = 3000;
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Ruta de la base de datos
+const dbPath = path.resolve(__dirname, 'inventario.db');
+const db = new sqlite3.Database(dbPath, (err) => {
+    if (err) {
+        console.error('Error al conectar con la base de datos:', err.message);
+    } else {
+        console.log('Conectado a la base de datos SQLite.');
+    }
+});
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Configuración de la sesión
 app.use(session({
     secret: 'mi_clave_secreta',
     resave: false,
     saveUninitialized: true
 }));
 
-// Rutas de autenticación
-app.post('/login', authController.login);
-app.post('/logout', authController.logout);
+// --------------------------------------------- RUTAS PARA RECEPCIÓN Y FRITURA ---------------------------------------------
+// Usamos express.Router() para organizar las rutas
 
-// Rutas de productos
-app.use('/productos', productosRoutes);
+const router = express.Router();
 
-// Rutas de empacadores 
-app.get('/empacadores', empacadoresController.getEmpacadores);
-app.post('/empacadores', empacadoresController.createEmpacador);
-app.get('/empacadores/:id', empacadoresController.getEmpacadorById);
-app.put('/empacadores/:id', empacadoresController.updateEmpacador);
-app.delete('/empacadores/:id', empacadoresController.deleteEmpacador);
+// Ruta para registrar productos recibidos (Empacadores)
+router.post('/api/recepcion', (req, res) => {
+    const { productoId, cantidad } = req.body;
 
-// Rutas de frituras
-app.post('/frituras', friturasController.createFritura);
+    // Validación de entrada
+    if (!productoId || !cantidad) {
+        return res.status(400).json({ message: 'Por favor, complete todos los campos.' });
+    }
 
-// Rutas de empaques
-app.get('/empaques', empaquesController.getEmpaques);
-app.post('/empaques', empaquesController.createEmpaque);
-
-// Rutas de recepciones
-app.post('/recepciones', recepcionesController.createRecepcion);
-
-// Middleware para servir archivos estáticos desde la carpeta "public"
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));  
+    // Llamamos a la función para registrar la recepción en la base de datos
+    registrarRecepcion(productoId, cantidad, (err, result) => {
+        if (err) {
+            return res.status(500).json({ message: 'Error al registrar la recepción', error: err });
+        }
+        res.json(result);
+    });
 });
 
-app.get('/dashboard', (req, res) => {
-    if (req.session.user) {
-        res.sendFile(path.join(__dirname, 'public', 'dashboard.html')); // Cambia el nombre de archivo según corresponda
+// Ruta para registrar frituras de productos
+router.post('/api/fritura', (req, res) => {
+    const { productoId, cantidad } = req.body;
+
+    // Validación de entrada
+    if (!productoId || !cantidad) {
+        return res.status(400).json({ message: 'Por favor, complete todos los campos.' });
+    }
+
+    // Llamamos a la función para registrar la fritura en la base de datos
+    registrarFritura(productoId, cantidad, (err, result) => {
+        if (err) {
+            return res.status(500).json({ message: 'Error al registrar la fritura', error: err });
+        }
+        res.json(result);
+    });
+});
+
+// Ruta para obtener productos desde la base de datos
+router.get('/api/productos', (req, res) => {
+    const query = 'SELECT id, nombre FROM productos';
+    db.all(query, [], (err, rows) => {
+        if (err) {
+            console.error('Error al obtener productos:', err.message);
+            return res.status(500).json({ message: 'Error al obtener productos' });
+        }
+        res.json({ message: 'success', data: rows });
+    });
+});
+
+// --------------------------------------------- FIN DE LAS RUTAS ---------------------------------------------
+
+// Usamos el Router para todas las rutas de la API
+app.use(router);
+
+// --------------------------------------------- RUTAS DE LOGIN Y DASHBOARD ---------------------------------------------
+
+
+const password = '1234';
+
+// Encriptamos la contraseña
+bcrypt.hash(password, 10, (err, hashedPassword) => {
+    if (err) {
+        console.error('Error al encriptar la contraseña:', err);
     } else {
-        res.status(401).send('No autorizado'); 
+        // Ahora 'hashedPassword' es la contraseña encriptada
+        const USERS = { username: 'admin', password: hashedPassword };
+
+        // Verificar en el login
+        app.post('/users/login', (req, res) => {
+            const { username, password } = req.body;
+
+            if (username === USERS.username) {
+                bcrypt.compare(password, USERS.password, (err, isMatch) => {
+                    if (err) {
+                        return res.status(500).json({ message: 'Error al verificar la contraseña' });
+                    }
+                    if (isMatch) {
+                        req.session.user = username; // Guardar usuario en la sesión
+                        res.json({ success: true, message: 'Bienvenido!' });
+                    } else {
+                        res.json({ success: false, message: 'Credenciales incorrectas' });
+                    }
+                });
+            } else {
+                res.json({ success: false, message: 'Credenciales incorrectas' });
+            }
+        });
     }
 });
 
+
+// Ruta para servir la página del dashboard, solo si el usuario está autenticado
+app.get('/dashboard', (req, res) => {
+    if (req.session.user) {
+        res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
+    } else {
+        res.status(401).send('No autorizado');
+    }
+});
+
+// Ruta para servir la página de inicio (index.html)
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// --------------------------------------------- INICIO DEL SERVIDOR ---------------------------------------------
+
+// Iniciar el servidor en el puerto especificado
 app.listen(port, () => {
     console.log(`Servidor corriendo en http://localhost:${port}`);
 });

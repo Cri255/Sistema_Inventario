@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,7 +18,64 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
     <!-- Importar archivo JavaScript después de jQuery -->
-    <script src="/js/reception.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Cargar productos en la lista desplegable
+            $.ajax({
+                url: '/api/productos', // Cambié la ruta a '/api/productos' según el backend que proporcioné
+                method: 'GET',
+                success: function(response) {
+                    const productos = response.data;
+                    const select = $('#productos');
+
+                    // Limpiar la lista desplegable
+                    select.empty();
+                    select.append('<option value="">Seleccione un producto</option>');
+
+                    // Llenar la lista desplegable con los productos
+                    productos.forEach(producto => {
+                        select.append(new Option(producto.nombre, producto.id));
+                    });
+                },
+                error: function(err) {
+                    console.error('Error al cargar productos:', err);
+                    $('#message').html('<div class="alert alert-danger">Error al cargar los productos.</div>');
+                }
+            });
+
+            // Manejar el envío del formulario
+            $('#formRecepcion').on('submit', function(event) {
+                event.preventDefault(); // Prevenir la recarga de la página
+
+                const productoId = $('#productos').val();
+                const cantidad = $('#cantidad').val();
+
+                if (!productoId || !cantidad) {
+                    $('#message').html('<div class="alert alert-danger">Todos los campos son obligatorios.</div>');
+                    return;
+                }
+
+                // Registrar recepción en el backend
+                $.ajax({
+                    url: '/api/recepciones', // Cambié la ruta a '/api/recepciones' según el backend que proporcioné
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        material_id: productoId,
+                        cantidad: cantidad
+                    }),
+                    success: function(response) {
+                        $('#message').html('<div class="alert alert-success">Recepción registrada con éxito.</div>');
+                        $('#formRecepcion')[0].reset(); // Limpiar el formulario
+                    },
+                    error: function(err) {
+                        console.error('Error al registrar recepción:', err);
+                        $('#message').html('<div class="alert alert-danger">Error al registrar la recepción.</div>');
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 <body>
 
@@ -29,7 +86,7 @@
         <form id="formRecepcion" class="border p-4 rounded bg-light">
             <div class="form-group">
                 <label for="productos">Selecciona un producto:</label>
-                <select id="productos" class="form-control">
+                <select id="productos" class="form-control" required>
                     <option value="">Seleccione un producto</option>
                 </select>
             </div>
